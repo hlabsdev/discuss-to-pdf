@@ -16,7 +16,8 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
-PORT = int(os.environ.get('PORT', '8080'))
+# PORT = int(os.environ.get('PORT', '8443'))
+PORT = int(os.environ.get('PORT', '80'))
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 
@@ -117,28 +118,31 @@ def main():
     dp.add_error_handler(error)
         
     # ====== This is for using webhook ====== #
-
+    ''' 
     # Start the Bot
-    updater.start_webhook(listen="0.0.0.0",
+    # updater.start_webhook(listen="0.0.0.0",
+    updater.start_webhook(listen="213.188.222.230",
                           port=PORT,
-                          url_path=discussToPDFToken)
+                          url_path=discussToPDFToken,
+                          webhook_url=app_url+discussToPDFToken)
+    
     # updater.bot.set_webhook(url=settings.WEBHOOK_URL)
-    updater.bot.set_webhook(app_url + discussToPDFToken)
+    # updater.bot.set_webhook(app_url +"/"+ discussToPDFToken)
+
+    # Run the bot until you press Ctrl-C or the process receives SIGINT,
+    # SIGTERM or SIGABRT. This should be used most of the time, since
+    # start_polling() is non-blocking and will stop the bot gracefully.
+    updater.idle() '''
+
+
+    # ====== This is for using polling ====== #
+    # Start the Bot
+    updater.start_polling()
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
     # start_polling() is non-blocking and will stop the bot gracefully.
     updater.idle()
-
-
-    # ====== This is for using polling ====== #
-    # # Start the Bot
-    # updater.start_polling()
-
-    # # Run the bot until you press Ctrl-C or the process receives SIGINT,
-    # # SIGTERM or SIGABRT. This should be used most of the time, since
-    # # start_polling() is non-blocking and will stop the bot gracefully.
-    # updater.idle()
 
 
 if __name__ == '__main__':

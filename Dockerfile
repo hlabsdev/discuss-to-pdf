@@ -12,8 +12,8 @@ COPY requirements.txt requirements.txt
 
 RUN pip install -r requirements.txt
 
-COPY . .
+# COPY . .
 
 # CMD [ "python3", "bot.py"]
-CMD [ "./bot.py"]
-ENTRYPOINT [ "python" ]
+CMD [ "nohup", "python", "./bot.py"]
+# ENTRYPOINT [ "python" ]
