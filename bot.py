@@ -2,21 +2,9 @@
 # -*- coding: utf-8 -*-
 # This program is dedicated to the public domain under the CC0 license.
 
-"""
-Simple Bot to reply to Telegram messages.
-
-First, a few handler functions are defined. Then, those functions are passed to
-the Dispatcher and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
-
-Usage:
-Basic Echobot example, repeats messages.
-Press Ctrl-C on the command line or send a signal to the process to stop the
-bot.
-"""
 
 import logging
-
+import os
 from telegram.ext import Updater, CommandHandler, MessageHandler, Filters
 from telegram import InlineQueryResultArticle, InputTextMessageContent
 from telegram.ext import InlineQueryHandler
@@ -28,7 +16,7 @@ logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s
 logger = logging.getLogger(__name__)
 
 
-PORT = int(os.environ.get('PORT', '8443'))
+PORT = int(os.environ.get('PORT', '8080'))
 # Define a few command handlers. These usually take the two arguments update and
 # context. Error handlers also receive the raised TelegramError object in error.
 
@@ -47,7 +35,6 @@ def start(update, context):
     update.message.reply_text(welcom_text)
     # update.message.reply_text('Hello to use this, you should choose the chat to convert into pdf!')
 
-
 def help(update, context):
     """Send a message when the command /help is issued."""
     update.message.reply_text("""
@@ -58,7 +45,6 @@ def help(update, context):
     /select_group: Select the group which's discussion will be converted into PDF, by sending the group's link. Exemple : t.me/my_awesome_group
     """)
 
-
 def echo(update, context):
     """Echo the user message."""
     update.message.reply_text(update.message.text)
@@ -68,15 +54,12 @@ def mishandle(update, context):
     message = 'Je n\'ai pas compris votre message "{0}"'.format(update.message.text)
     update.message.reply_text(message)
 
-
 # Commande de selection de chat
 def select_chat(update, context):
     # message = "Select the chat which's discussion will be converted into PDF, by sending the username of the other interlocutor. Exemple : if you want to turn your discussion with your friend John Doe, just send his username @jonhdoe."
     # update.message.reply_text(message)    
     text = "Select the chat which's discussion will be converted into PDF, by sending the username of the other interlocutor. Exemple : if you want to turn your discussion with your friend John Doe, just send his username @jonhdoe."
     context.bot.send_message(chat_id=update.effective_chat.id, text=text)
-
-    
 
 # Commande de selection de chat
 def select_group(update, context):
@@ -106,6 +89,8 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 discussToPDFToken="796973086:AAFjQ7RCcox0T7CTZzdJDiGRp60oQqvh9uk"
+app_url="https://discusstopdf.fly.dev/"
+
 def main():
     """Start the bot."""
     # Create the Updater and pass it your bot's token.
@@ -138,7 +123,7 @@ def main():
                           port=PORT,
                           url_path=discussToPDFToken)
     # updater.bot.set_webhook(url=settings.WEBHOOK_URL)
-    updater.bot.set_webhook(APP_NAME + discussToPDFToken)
+    updater.bot.set_webhook(app_url + discussToPDFToken)
 
     # Run the bot until you press Ctrl-C or the process receives SIGINT,
     # SIGTERM or SIGABRT. This should be used most of the time, since
